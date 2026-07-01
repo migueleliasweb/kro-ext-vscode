@@ -45,23 +45,28 @@ class KroDefinitionProvider implements vscode.DefinitionProvider {
 export function activate(context: vscode.ExtensionContext) {
   console.log('KRO Support extension is now active!');
 
-  // Register Document Symbol Provider for YAML files
-  const symbolProvider = vscode.languages.registerDocumentSymbolProvider(
+  const documentSelector = [
     { language: 'yaml' },
+    { language: 'kro-rgd' }
+  ];
+
+  // Register Document Symbol Provider
+  const symbolProvider = vscode.languages.registerDocumentSymbolProvider(
+    documentSelector,
     new KroDocumentSymbolProvider()
   );
   context.subscriptions.push(symbolProvider);
 
-  // Register Definition Provider (Cmd+Click / Go to Definition) for YAML files
+  // Register Definition Provider (Cmd+Click / Go to Definition)
   const definitionProvider = vscode.languages.registerDefinitionProvider(
-    { language: 'yaml' },
+    documentSelector,
     new KroDefinitionProvider()
   );
   context.subscriptions.push(definitionProvider);
 
-  // Register Autocomplete/Completion Item Provider for YAML files
+  // Register Autocomplete/Completion Item Provider
   const completionProvider = vscode.languages.registerCompletionItemProvider(
-    { language: 'yaml' },
+    documentSelector,
     new KroCompletionItemProvider(),
     '$',
     '.'
@@ -109,7 +114,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     try {
       const doc = await vscode.workspace.openTextDocument({
-        language: 'yaml',
+        language: 'kro-rgd',
         content: boilerplate
       });
       await vscode.window.showTextDocument(doc);
@@ -122,7 +127,7 @@ export function activate(context: vscode.ExtensionContext) {
   // Command: Visualize KRO Resource Graph
   const visualizeCmd = vscode.commands.registerCommand('kro.visualize', () => {
     const editor = vscode.window.activeTextEditor;
-    if (editor && editor.document.languageId === 'yaml') {
+    if (editor && (editor.document.languageId === 'yaml' || editor.document.languageId === 'kro-rgd')) {
       KroVisualizerPanel.createOrShow(context.extensionUri, editor);
     } else {
       vscode.window.showErrorMessage('Please open a KRO ResourceGraphDefinition YAML file to visualize.');

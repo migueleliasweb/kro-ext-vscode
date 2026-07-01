@@ -95,7 +95,7 @@ export class KroVisualizerPanel {
     // Listen for when the active editor changes
     vscode.window.onDidChangeActiveTextEditor(
       (e) => {
-        if (e && e.document.languageId === 'yaml') {
+        if (e && (e.document.languageId === 'yaml' || e.document.languageId === 'kro-rgd')) {
           // If kind is KRO ResourceGraphDefinition, track it
           const parsed = parseKroDocument(e.document);
           if (parsed.symbols.length > 0) {

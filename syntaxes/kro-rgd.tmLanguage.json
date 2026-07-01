@@ -1,0 +1,8 @@
+{
+  "scopeName": "source.kro-rgd",
+  "patterns": [
+    {
+      "include": "source.yaml"
+    }
+  ]
+}
