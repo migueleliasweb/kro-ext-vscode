@@ -1,0 +1,77 @@
+{
+  "name": "kro-vscode",
+  "displayName": "KRO Support",
+  "description": "Rich autocompletion, schema validation, outline navigation, Go to Definition, and visualization for KRO (Kubernetes Resource Operator) manifests.",
+  "version": "0.0.1",
+  "publisher": "migueleliasweb",
+  "engines": {
+    "vscode": "^1.125.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Visualization",
+    "Linters"
+  ],
+  "activationEvents": [
+    "onLanguage:yaml"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "kro.visualize",
+        "title": "KRO: Visualize Resource Graph",
+        "category": "KRO"
+      },
+      {
+        "command": "kro.createTemplate",
+        "title": "KRO: Create New ResourceGraphDefinition",
+        "category": "KRO"
+      }
+    ],
+    "jsonValidation": [
+      {
+        "fileMatch": [
+          "*.rgd.yaml",
+          "*.rgd.yml",
+          "*-rgd.yaml",
+          "*-rgd.yml"
+        ],
+        "url": "./schemas/rgd-schema.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "yaml",
+        "path": "./snippets/snippets.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "build": "npm run compile",
+    "package": "npx @vscode/vsce package",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "24.x",
+    "@types/vscode": "^1.125.0",
+    "@vscode/test-cli": "^0.0.15",
+    "@vscode/test-electron": "^3.0.0",
+    "eslint": "^10.5.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.61.1"
+  },
+  "overrides": {
+    "diff": "^8.0.4",
+    "serialize-javascript": "^7.0.6"
+  },
+  "dependencies": {
+    "yaml": "^2.9.0"
+  }
+}
