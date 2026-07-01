@@ -2,7 +2,7 @@
   "name": "kro-vscode",
   "displayName": "KRO Support",
   "description": "Rich autocompletion, schema validation, outline navigation, Go to Definition, and visualization for KRO (Kubernetes Resource Operator) manifests.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "migueleliasweb",
   "engines": {
     "vscode": "^1.125.0"
@@ -13,10 +13,31 @@
     "Linters"
   ],
   "activationEvents": [
-    "onLanguage:yaml"
+    "onLanguage:yaml",
+    "onLanguage:kro-rgd"
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "languages": [
+      {
+        "id": "kro-rgd",
+        "aliases": [
+          "KRO ResourceGraphDefinition",
+          "kro-rgd"
+        ],
+        "extensions": [
+          ".rgd.yaml",
+          ".rgd.yml"
+        ]
+      }
+    ],
+    "grammars": [
+      {
+        "language": "kro-rgd",
+        "scopeName": "source.kro-rgd",
+        "path": "./syntaxes/kro-rgd.tmLanguage.json"
+      }
+    ],
     "commands": [
       {
         "command": "kro.visualize",
@@ -43,6 +64,10 @@
     "snippets": [
       {
         "language": "yaml",
+        "path": "./snippets/snippets.json"
+      },
+      {
+        "language": "kro-rgd",
         "path": "./snippets/snippets.json"
       }
     ]
