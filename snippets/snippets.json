@@ -1,0 +1,66 @@
+{
+  "ResourceGraphDefinition Boilerplate": {
+    "prefix": "rgd",
+    "body": [
+      "apiVersion: kro.run/v1alpha1",
+      "kind: ResourceGraphDefinition",
+      "metadata:",
+      "  name: ${1:my-app}",
+      "spec:",
+      "  schema:",
+      "    apiVersion: ${2:v1alpha1}",
+      "    kind: ${3:MyAppStack}",
+      "    spec:",
+      "      properties:",
+      "        ${4:replicas}:",
+      "          type: ${5:integer}",
+      "          default: ${6:1}",
+      "  resources:",
+      "    - id: ${7:my-deployment}",
+      "      template:",
+      "        apiVersion: apps/v1",
+      "        kind: Deployment",
+      "        metadata:",
+      "          name: \\${schema.metadata.name}",
+      "        spec:",
+      "          replicas: \\${schema.spec.${4:replicas}}",
+      "          selector:",
+      "            matchLabels:",
+      "              app: \\${schema.metadata.name}",
+      "          template:",
+      "            metadata:",
+      "              labels:",
+      "                app: \\${schema.metadata.name}",
+      "            spec:",
+      "              containers:",
+      "                - name: app",
+      "                  image: ${8:nginx:latest}"
+    ],
+    "description": "Create a boilerplate ResourceGraphDefinition"
+  },
+  "ResourceGraphDefinition Resource Item": {
+    "prefix": "rgd-resource",
+    "body": [
+      "- id: ${1:resource-id}",
+      "  template:",
+      "    apiVersion: ${2:apps/v1}",
+      "    kind: ${3:Deployment}",
+      "    metadata:",
+      "      name: \\${schema.metadata.name}-${1:resource-id}",
+      "    spec:",
+      "      ${4:replicas: \\${schema.spec.replicas\\}}",
+      "  readyWhen:",
+      "    - ${5:self.status.readyReplicas == self.status.replicas}",
+      "  includeWhen:",
+      "    - ${6:schema.spec.enabled == true}"
+    ],
+    "description": "Add a resource item under spec.resources"
+  },
+  "CEL Expression": {
+    "prefix": "cel",
+    "body": [
+      "\\${${1:schema.spec.property}}"
+    ],
+    "description": "Insert a KRO CEL expression string"
+  }
+}
